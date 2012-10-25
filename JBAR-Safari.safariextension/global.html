@@ -1,0 +1,65 @@
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+    <title>JBAR-Safari</title>
+    <script type="text/javascript">
+    
+    console.log("Loaded global.html");
+    
+    var x;
+    
+    var sites = {
+        amazon:     { url: "amazon.com", tag:"tag=thelinactsho-20"},
+        amazonuk:   { url: "amazon.co.uk", tag:"tag=jupitebroadc-21"}, 
+        amazonde:   { url: "amazon.de", tag:"tag=jupitebroad02-21"}, 
+        audible:    { url: "audible.com", tag:"source_code=COMA0230WS012110&AID=10298646&PID=4897915"}, 
+        mint:       { url: "mint.com", tag:"PID=4897915&priorityCode=4216102399&source=cj_pfm"},
+        bestbuy:    { url: "bestbuy.com", tag:"AID=10483113&PID=4897915&ref=39&CJPID=4897915&loc=01"},
+        thinkgeek:  { url: "thinkgeek.com", tag:"cpg=cj&ref=&CJURL=&CJID=3282554"},
+        newegg:     { url: "newegg.com", tag:"nm_mc=AFC-C8Junction&cm_mmc=AFC-C8Junction-_-Branding-_-na-_-na&AID=10440554&PID=4897915"}
+    };
+    
+    var urlChangeListener = function (event) {
+        // Stops the current URL from loading
+        // event.preventDefault(); 
+            
+        var tUrl = ''; // tagged/test Url
+        if (event.url != null){ //when the tab first opens event.url == null
+          tUrl = event.url;
+        }
+            
+        for (x in sites) {
+          if (tUrl.indexOf(sites[x].url) >= 0) {
+            if (tUrl.indexOf(sites[x].tag) == -1 ){ 
+              var newUrl = tUrl + (tUrl.indexOf("?") >= 0 ? "&" : "?") + sites[x].tag;
+              event.target.url = newUrl;
+              console.log("Changed " + tUrl + " to " + newUrl);
+              //event.target.removeEventListener("beforeNavigate", urlChangeListener, false);
+              break;
+            }
+          }
+        }
+    };
+    
+    var openListener = function (event) {
+        // Ensure we are working with a valid tab
+        if (event.target instanceof SafariBrowserTab) {
+          event.target.addEventListener("beforeNavigate", urlChangeListener, false);
+        }
+    };
+    
+    var closeListener = function (event) {
+        // Ensure we are working with a valid tab
+        if (event.target instanceof SafariBrowserTab) {
+          event.target.removeEventListener("beforeNavigate", urlChangeListener, false);
+        }
+    };
+     
+    safari.application.addEventListener("open", openListener, true);
+    safari.application.addEventListener("close", closeListener, true);
+    
+    	</script>
+</head>
+<body></body>
+</html>
+
