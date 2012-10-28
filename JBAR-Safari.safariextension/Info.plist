@@ -44,6 +44,9 @@
 				<string>*.bestbuy.com</string>
 				<string>*.thinkgeek.com</string>
 				<string>*.newegg.com</string>
+				<string>*.newegg.ca</string>
+				<string>*.guitarcenter.com</string>
+				<string>www.ebay.com</string>
 			</array>
 			<key>Include Secure Pages</key>
 			<true/>

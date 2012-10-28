@@ -8,6 +8,7 @@
     
     var x;
     
+    //tag sites
     var sites = {
         amazon:     { url: "amazon.com", tag:"tag=thelinactsho-20"},
         amazonuk:   { url: "amazon.co.uk", tag:"tag=jupitebroadc-21"}, 
@@ -16,14 +17,20 @@
         mint:       { url: "mint.com", tag:"PID=4897915&priorityCode=4216102399&source=cj_pfm"},
         bestbuy:    { url: "bestbuy.com", tag:"AID=10483113&PID=4897915&ref=39&CJPID=4897915&loc=01"},
         thinkgeek:  { url: "thinkgeek.com", tag:"cpg=cj&ref=&CJURL=&CJID=3282554"},
-        newegg:     { url: "newegg.com", tag:"nm_mc=AFC-C8Junction&cm_mmc=AFC-C8Junction-_-Branding-_-na-_-na&AID=10440554&PID=4897915"}
+        newegg:     { url: "newegg.com", tag:"nm_mc=AFC-C8Junction&cm_mmc=AFC-C8Junction-_-Branding-_-na-_-na&AID=10440554&PID=4897915"},
+        neweggca:   { url: "newegg.ca", tag:"nm_mc=AFC-C8junctionCA&cm_mmc=AFC-C8JunctionCA-_-homepage-_-na-_-na&AID=10606701&PID=4897915"},
+        guitarcenter: {url: "guitarcenter.com", tag:"CJAID=10453836&CJPID=4897915"}
+    };
+    // redirect sites
+    var redsites = {
+        ebay:       { url: "ebay.com", redirect:"http://rover.ebay.com/rover/1/711-53200-19255-0/1?campid=5337188513&customid=JBAR-Safari&toolid=10013&mpre="}
     };
     
     var urlChangeListener = function (event) {
         // Stops the current URL from loading
         // event.preventDefault(); 
             
-        var tUrl = ''; // tagged/test Url
+        var tUrl = ''; // test Url
         if (event.url != null){ //when the tab first opens event.url == null
           tUrl = event.url;
         }
@@ -37,6 +44,17 @@
               //event.target.removeEventListener("beforeNavigate", urlChangeListener, false);
               break;
             }
+          }
+        }
+        
+        for (x in redsites) {
+          if (tUrl.indexOf(redsites[x].url) >= 0) {
+            var newUrl = redsites[x].redirect + encodeURIComponent(tUrl);
+            event.target.removeEventListener("beforeNavigate", urlChangeListener, false);
+            event.target.url = newUrl;            
+            console.log("Changed " + tUrl + " to " + newUrl);
+            //event.target.addEventListener("beforeNavigate", urlChangeListener, false);
+            break;
           }
         }
     };
